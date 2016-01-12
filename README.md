@@ -1,2 +1,2 @@
 # desktop
-YouBetter for a desktop device
+YouBetter for the desktop
