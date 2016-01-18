@@ -30,11 +30,9 @@
     "file-loader": "^0.8.5",
     "history": "^1.17.0",
     "html-webpack-plugin": "^1.7.0",
-    "pouch-redux-middleware": "^0.1.0",
     "pouchdb": "^5.1.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
-    "react-router": "^1.0.3",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.10"
