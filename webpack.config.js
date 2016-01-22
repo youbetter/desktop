@@ -60,23 +60,4 @@ var config = {
     ]
 };
 
-switch (process.env.npm_lifecycle_event) {
-    case 'start':
-        config.devServer = {
-            historyApiFallback: true,
-            hot: true,
-            inline: true,
-            progress: true,
-            stats: 'errors-only',
-            host: process.env.HOST,
-            port: process.env.PORT
-        };
-
-        config.plugins.push(new webpack.HotModuleReplacementPlugin());
-
-        break;
-    case 'build':
-        break;
-}
-
 module.exports = config;
