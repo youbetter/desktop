@@ -18,7 +18,7 @@ const App = React.createClass({
             React.PropTypes.shape({
                 action: React.PropTypes.string.isRequired,
                 text: React.PropTypes.string.isRequired,
-                component: React.PropTypes.object.isRequired,
+                component: React.PropTypes.func.isRequired,
                 index: React.PropTypes.boolean
             }).isRequired
         ).isRequired
@@ -75,7 +75,7 @@ const App = React.createClass({
             this.props.routes.find(route => route.index)
         );
 
-        return route ? route.component : '';
+        return route ? React.createElement(route.component) : '';
     },
     generateClickHandler: function (action) {
         return function (e) {
