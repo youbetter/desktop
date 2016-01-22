@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import WelcomeMessage from './WelcomeMessage.jsx';
-import Journal from './Journal.jsx';
-import Exercise from './Exercise.jsx';
 //TODO Include JS for Bootstrap Navbar
 
 const NavbarLink = React.createClass({
@@ -15,15 +12,21 @@ const NavbarLink = React.createClass({
 });
 
 const App = React.createClass({
+    propTypes: {
+        name: React.PropTypes.string.isRequired,
+        routes: React.PropTypes.arrayOf(
+            React.PropTypes.shape({
+                action: React.PropTypes.string.isRequired,
+                text: React.PropTypes.string.isRequired,
+                component: React.PropTypes.object.isRequired,
+                index: React.PropTypes.boolean
+            }).isRequired
+        ).isRequired
+    },
     getInitialState: function () {
-        return { route: { action: 'welcome' } };
+        return { };
     },
     render: function () {
-        const links = [
-            { action: 'journal', text: 'Journal' },
-            { action: 'exercise', text: 'Exercise' }
-        ];
-       
         return (
             <div id="app">
                 <nav className="navbar navbar-default">
@@ -40,23 +43,24 @@ const App = React.createClass({
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span> </button>
-                            <a href="#" onClick={this.generateClickHandler('welcome')} className="navbar-brand">
+                            <a href="#" onClick={this.generateClickHandler('index')} className="navbar-brand">
                                 <i style={{ textTransform: 'uppercase' }}>You Better</i>
                             </a>
                         </div>
                         <div className="collapse navbar-collapse" id="navbar-links">
                             <ul className="nav navbar-nav">
-                                {
-                                    links.map((link) => {
-                                        return (
-                                            <NavbarLink
-                                                key={link.action}
-                                                isActive={this.state.route.action === link.action}
-                                                clickHandler={this.generateClickHandler(link.action)}
-                                            >{link.text}</NavbarLink>
-                                        );
-                                    })
-                                }
+                                {this.props.routes.filter(route => !route.index).map(route => {
+                                    return (
+                                        <li
+                                            key={route.action}
+                                            className={this.state.action === route.action ? 'active' : ''}
+                                        >
+                                            <a href="#" onClick={this.generateClickHandler(route.action)}>
+                                                {route.text}
+                                            </a>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     </div>
@@ -66,21 +70,18 @@ const App = React.createClass({
         );
     },
     route: function () {
-        switch (this.state.route.action) {
-            case 'journal':
-                return <Journal></Journal>;
-            case 'exercise':
-                return <Exercise></Exercise>;
-            case 'welcome':
-            default:
-                return <WelcomeMessage></WelcomeMessage>;
-        }
+        let route = (
+            this.props.routes.find(route => route.action === this.state.action) ||
+            this.props.routes.find(route => route.index)
+        );
+
+        return route ? route.component : '';
     },
     generateClickHandler: function (action) {
         return function (e) {
             e.preventDefault();
 
-            this.setState({ route: { action: action } });
+            this.setState({ action: action });
         }.bind(this);
     }
 });

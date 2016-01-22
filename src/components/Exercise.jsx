@@ -89,7 +89,6 @@ const Exercise = React.createClass({
                     ></ExerciseList>
                 );
         }
-        
     },
     addExercise: function (title, instructions) {
         return exercises.put({
