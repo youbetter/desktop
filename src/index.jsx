@@ -21,7 +21,8 @@ var routes = [
     {
         action: 'exercise',
         text: 'Exercise',
-        component: Exercise
+        component: Exercise,
+        props: [ 'config.exercise.remoteUrl' ]
     },
     {
         action: 'welcome',
@@ -31,5 +32,10 @@ var routes = [
     }
     
 ];
+var config = {
+    exercise: {
+        remoteUrl: 'http://youbetter.smileupps.com'
+    }
+};
 
-render(<App name="You Better" routes={routes}></App>, document.getElementById('root'));
+render(<App name="You Better" config={config} routes={routes}></App>, document.getElementById('root'));

@@ -75,7 +75,32 @@ const App = React.createClass({
             this.props.routes.find(route => route.index)
         );
 
-        return route ? React.createElement(route.component) : '';
+        return (
+            route ?
+            React.createElement(
+                route.component,
+                (
+                    route.props && route.props.length ?
+                    route.props.reduce(
+                        (props, prop) => {
+                            var path = prop.split('.');
+
+                            props[path[path.length - 1]] = path.reduce(
+                                (value, key) => {
+                                    return value[key];
+                                },
+                                this.props   
+                            );
+
+                            return props;
+                        },
+                        { }
+                    ) :
+                    undefined
+                )
+            ) :
+            ''
+        );
     },
     generateClickHandler: function (action) {
         return function (e) {
