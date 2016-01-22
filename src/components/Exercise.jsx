@@ -59,9 +59,8 @@ const Exercise = React.createClass({
             case 'view-exercise':
                 return (
                     <ExerciseDetails
-                        queryId={this.state.route.query.id}
-                        fetch={this.viewExercise}
-                        viewAllExercises={this.showExerciseList}
+                        fetch={this.viewExercise.bind(this, this.state.route.query.id)}
+                        link={{ text: 'Your Exercises', handleClick: this.showExerciseList }}
                     ></ExerciseDetails>
                 );
             case 'add-exercise':
@@ -74,10 +73,10 @@ const Exercise = React.createClass({
             case 'list-search-results':
                 return (
                     <ExerciseList
-                        title="Results"
+                        title="Search Results"
                         fetch={this.searchExercises.bind(this, this.state.route.query.term)}
                         showDetails={this.showExerciseDetails}
-                        viewAllExercises={this.showExerciseList}
+                        link={{ text: 'Your Exercises', handleClick: this.showExerciseList }}
                     ></ExerciseList>
                 );
             case 'list-exercises':

@@ -2,24 +2,23 @@ import React from 'react';
 
 const ExerciseDetails = React.createClass({
     propTypes: {
-        queryId: React.PropTypes.string.isRequired,
         fetch: React.PropTypes.func.isRequired,
-        viewAllExercises: React.PropTypes.func.isRequired
+        link: React.PropTypes.shape({
+            name: React.PropTypes.string,
+            handleClick: React.PropTypes.func
+        })
     },
     getInitialState: function () {
         return { loading: true };
     },
     componentDidMount: function () {
-        this.props.fetch(this.props.queryId).then(function (exercise) {
-            this.setState({
-                loading: false,
-                exercise: exercise
-            });
-        }.bind(this));
+        this.fetchExercise(this.props.fetch);
+    },
+    componentWillReceiveProps: function (newProps) {
+        this.fetchExercise(newProps.fetch);
     },
     render: function () {
         var component;
-        var instructions;
 
         if (this.state.loading) {
             component = <p>Loading...</p>
@@ -32,12 +31,26 @@ const ExerciseDetails = React.createClass({
                             return <li key={index}>{instruction}</li>;
                         })}
                     </ul>
-                    <a href="#" onClick={this.props.viewAllExercises}>&lt; Your Exercises</a>
+                    {
+                        this.props.link ? 
+                        <a href="#" onClick={this.props.link.handleClick}>{'< ' + this.props.link.text}</a> :
+                        ''
+                    }
                 </div>
             );
         }
 
         return component;
+    },
+    fetchExercise: function (fetch) {
+        this.replaceState({ loading: true });
+
+        fetch().then(function (exercise) {
+            this.setState({
+                loading: false,
+                exercise: exercise
+            });
+        }.bind(this));
     }
 });
 

@@ -5,14 +5,13 @@ const ExerciseList = React.createClass({
         title: React.PropTypes.string.isRequired,
         fetch: React.PropTypes.func.isRequired,
         showDetails: React.PropTypes.func.isRequired,
-        prevPage: React.PropTypes.func,
-        nextPage: React.PropTypes.func,
-        viewAllExercises: React.PropTypes.func
+        link: React.PropTypes.shape({
+            text: React.PropTypes.string.isRequired,
+            handleClick: React.PropTypes.func.isRequired
+        })
     },
     getInitialState: function () {
-        return {
-            loading: true
-        }
+        return { loading: true };
     },
     componentDidMount: function () {
         this.fetchExercises(this.props.fetch);
@@ -40,7 +39,7 @@ const ExerciseList = React.createClass({
 
                 state = <ul>{exercises}</ul>;
             } else {
-                state = <p>There are no exercises to display</p>;
+                state = <p>No exercises to display</p>;
             }
         }
 
@@ -49,14 +48,16 @@ const ExerciseList = React.createClass({
                 <h2>{this.props.title}</h2>
                 {state}
                 {
-                    this.props.viewAllExercises ? 
-                    <a href="#" onClick={this.props.viewAllExercises}>&lt; Your Exercises</a> :
+                    this.props.link ? 
+                    <a href="#" onClick={this.props.link.handleClick}>{'< ' + this.props.link.text}</a> :
                     ''
                 }
             </div>
         );
     },
     fetchExercises: function (fetch) {
+        this.replaceState({ loading: true });
+
         fetch().then(function (result) {
             this.setState({
                 loading: false,

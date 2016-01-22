@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import WelcomeMessage from './WelcomeMessage.jsx';
 import Journal from './Journal.jsx';
 import Exercise from './Exercise.jsx';
+//TODO Include JS for Bootstrap Navbar
 
 const NavbarLink = React.createClass({
     render: function () {
@@ -13,39 +14,15 @@ const NavbarLink = React.createClass({
     }
 });
 
-//TODO Include JS for Bootstrap Navbar
 const App = React.createClass({
     getInitialState: function () {
-        return { activeLink: 'welcome' };
-    },
-    generateOnClick: function (linkId) {
-        var app = this;
-
-        return function (e) {
-            e.preventDefault();
-
-            app.setState({ activeLink: linkId });
-        };
+        return { route: { action: 'welcome' } };
     },
     render: function () {
         const links = [
-            { id: 'journal', name: 'Journal' },
-            { id: 'exercise', name: 'Exercise' }
+            { action: 'journal', text: 'Journal' },
+            { action: 'exercise', text: 'Exercise' }
         ];
-        var activeChild;
-
-
-        switch (this.state.activeLink) {
-            case 'journal':
-                activeChild = <Journal></Journal>;
-                break;
-            case 'exercise':
-                activeChild = <Exercise></Exercise>;
-                break;
-            case 'welcome':
-            default:
-                activeChild = <WelcomeMessage></WelcomeMessage>;
-        }
        
         return (
             <div id="app">
@@ -63,7 +40,7 @@ const App = React.createClass({
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span> </button>
-                            <a href="#" onClick={this.generateOnClick('welcome')} className="navbar-brand">
+                            <a href="#" onClick={this.generateClickHandler('welcome')} className="navbar-brand">
                                 <i style={{ textTransform: 'uppercase' }}>You Better</i>
                             </a>
                         </div>
@@ -73,10 +50,10 @@ const App = React.createClass({
                                     links.map((link) => {
                                         return (
                                             <NavbarLink
-                                                key={link.id}
-                                                clickHandler={this.generateOnClick(link.id)}
-                                                isActive={this.state.activeLink === link.id}
-                                            >{link.name}</NavbarLink>
+                                                key={link.action}
+                                                isActive={this.state.route.action === link.action}
+                                                clickHandler={this.generateClickHandler(link.action)}
+                                            >{link.text}</NavbarLink>
                                         );
                                     })
                                 }
@@ -84,9 +61,27 @@ const App = React.createClass({
                         </div>
                     </div>
                 </nav>
-                {activeChild}
+                {this.route()}
             </div>
         );
+    },
+    route: function () {
+        switch (this.state.route.action) {
+            case 'journal':
+                return <Journal></Journal>;
+            case 'exercise':
+                return <Exercise></Exercise>;
+            case 'welcome':
+            default:
+                return <WelcomeMessage></WelcomeMessage>;
+        }
+    },
+    generateClickHandler: function (action) {
+        return function (e) {
+            e.preventDefault();
+
+            this.setState({ route: { action: action } });
+        }.bind(this);
     }
 });
 
