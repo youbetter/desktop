@@ -54,7 +54,7 @@ var config = {
             title: 'YOU BETTER',
             bodyContent: '',
             template: './src/index.html',
-            inject: 'body'
+            inject: 'head'
         }),
         new ExtractTextPlugin('styles.css')
     ]

@@ -32,10 +32,8 @@ var routes = [
     }
     
 ];
-var config = {
-    exercise: {
-        remoteUrl: 'http://youbetter.smileupps.com'
-    }
-};
 
-render(<App name="You Better" config={config} routes={routes}></App>, document.getElementById('root'));
+// Expose the renderApp function on the window object.
+window.renderApp = function (config) {
+    render(<App name="You Better" config={config} routes={routes}></App>, document.getElementById('root'));
+};
