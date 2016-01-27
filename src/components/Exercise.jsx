@@ -9,7 +9,8 @@ const exercises = new PouchDB('exercises');
 
 const Exercise = React.createClass({
     propTypes: {
-        remoteUrl: React.PropTypes.string,
+        COUCHDB_URL: React.PropTypes.string,
+        COUCHDB_TOKEN: React.PropTypes.string,
         initialAction: React.PropTypes.oneOf([ 'list-exercises', 'add-exercise' ]),
         initialQuery: React.PropTypes.object
     },

@@ -4,9 +4,9 @@
         <title>{%= o.htmlWebpackPlugin.options.title %}</title>
     </head>
     <body>
-        <div id="root"></div>
+        <div id="you-better"></div>
         <script type="text/javascript">
-            renderApp();
+            youBetter(document.getElementById('you-better'), { COUCHDB_URL: 'http://localhost:5984' });
         </script>
     </body>
 </html>

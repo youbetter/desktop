@@ -1,10 +1,10 @@
 {
-  "name": "youbetter-desktop",
+  "name": "youbetter-desktop-app",
   "version": "0.1.0",
-  "description": "YouBetter for the desktop",
+  "description": "Let it shine",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/youbetter/desktop.git"
+    "url": "git+https://github.com/youbetter/desktop-app.git"
   },
   "keywords": [
     "youbetter",
@@ -17,7 +17,7 @@
   "author": "Sean Jacke",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/youbetter/desktop/issues"
+    "url": "https://github.com/youbetter/desktop-app/issues"
   },
   "homepage": "http://youbetter.today",
   "babel": {
@@ -61,7 +61,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "build": "./node_modules/webpack/bin/webpack.js",
-    "start": "NODE_ENV=development ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --inline --hot --content-base dist/"
+    "prepublish": "webpack -p",
+    "start": "webpack-dev-server --progress --inline --hot --content-base build/"
   }
 }

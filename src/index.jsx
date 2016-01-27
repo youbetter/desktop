@@ -8,11 +8,10 @@ import WelcomeMessage from './components/WelcomeMessage.jsx';
 import Journal from './components/Journal.jsx';
 import Exercise from './components/Exercise.jsx';
 
-// To use PouchDB-Fauxton Chrome Extension, window.PouchDB needs to be set
-// TODO Can this be changed from window to global? Can this only be done when env === 'DEV'?
-window.PouchDB = PouchDB;
+// To use the PouchDB-Fauxton Chrome Extension, window.PouchDB needs to be set
+if (__DEV__) window.PouchDB = PouchDB;
 
-var routes = [
+const routes = [
     {
         action: 'journal',
         text: 'Journal',
@@ -22,7 +21,10 @@ var routes = [
         action: 'exercise',
         text: 'Exercise',
         component: Exercise,
-        props: [ 'config.exercise.remoteUrl' ]
+        props: [
+            'config.COUCHDB_URL',
+            'config.COUCHDB_TOKEN'
+        ]
     },
     {
         action: 'welcome',
@@ -33,7 +35,16 @@ var routes = [
     
 ];
 
-// Expose the renderApp function on the window object.
-window.renderApp = function (config) {
-    render(<App name="You Better" config={config} routes={routes}></App>, document.getElementById('root'));
+let defaults = {
+    COUCHDB_URL: '',
+    COUCHDB_TOKEN: ''
 };
+
+const youBetter = function (el, options) {
+    render(<App name="You Better" config={Object.assign(defaults, options)} routes={routes}></App>, el);
+}
+
+// Provide a main function on the window object.
+window.youBetter = youBetter;
+
+export default youBetter;
