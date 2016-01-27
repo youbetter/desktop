@@ -1,2 +1,2 @@
 #You Better#
-Let it shine from the a desktop device.
+Let it shine from a desktop device.
