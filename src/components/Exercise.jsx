@@ -5,12 +5,9 @@ import AddExerciseForm from './AddExerciseForm.jsx';
 import ExerciseList from './ExerciseList.jsx';
 import ExerciseDetails from './ExerciseDetails.jsx';
 
-const exercises = new PouchDB('exercises');
-
 const Exercise = React.createClass({
     propTypes: {
-        COUCHDB_URL: React.PropTypes.string,
-        COUCHDB_TOKEN: React.PropTypes.string,
+        db: React.PropTypes.instanceOf(PouchDB).isRequired,
         initialAction: React.PropTypes.oneOf([ 'list-exercises', 'add-exercise' ]),
         initialQuery: React.PropTypes.object
     },
@@ -89,20 +86,21 @@ const Exercise = React.createClass({
                 );
         }
     },
+    // TODO Add type: 'exercise' and create views
     addExercise: function (title, instructions) {
-        return exercises.put({
+        return this.props.db.put({
             _id: title,
             instructions: instructions
         });
     },
     viewExercise: function (id) {
-        return exercises.get(id);
+        return this.props.db.get(id);
     },
     listExercises: function (skip, limit) {
-        return exercises.allDocs();
+        return this.props.db.allDocs();
     },
     searchExercises: function (term, skip, limit) {
-        return exercises.allDocs({
+        return this.props.db.allDocs({
             startkey: term,
             endkey: term + '\uffff'
         });

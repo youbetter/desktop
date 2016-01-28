@@ -21,10 +21,7 @@ const routes = [
         action: 'exercise',
         text: 'Exercise',
         component: Exercise,
-        props: [
-            'config.COUCHDB_URL',
-            'config.COUCHDB_TOKEN'
-        ]
+        props: [ 'db' ]
     },
     {
         action: 'welcome',
@@ -35,13 +32,12 @@ const routes = [
     
 ];
 
-let defaults = {
-    COUCHDB_URL: '',
-    COUCHDB_TOKEN: ''
-};
+const youBetter = function (el, remoteDb) {
+    const db = new PouchDB('you-better');
 
-const youBetter = function (el, options) {
-    render(<App name="You Better" config={Object.assign(defaults, options)} routes={routes}></App>, el);
+    db.sync(remoteDb, { live: true, retry: true });
+
+    render(<App name="You Better" db={db} routes={routes}></App>, el);
 }
 
 // Provide a main function on the window object.
