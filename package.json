@@ -61,7 +61,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "prepublish": "webpack -p",
+    "prepublish": "NODE_ENV=production webpack -p",
     "start": "webpack-dev-server --progress --inline --hot --content-base build/"
   }
 }
