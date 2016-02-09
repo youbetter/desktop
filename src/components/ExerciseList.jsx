@@ -31,10 +31,10 @@ const ExerciseList = React.createClass({
                     var onClick = function (e) {
                         e.preventDefault();
 
-                        this.props.showDetails(exercise);
+                        this.props.showDetails(exercise._id);
                     }.bind(this);
 
-                    return <li key={index}><a href="#" onClick={onClick}>{exercise}</a></li>;
+                    return <li key={exercise._id}><a href="#" onClick={onClick}>{exercise.title}</a></li>;
                 }.bind(this));
 
                 state = <ul>{exercises}</ul>;
@@ -61,7 +61,7 @@ const ExerciseList = React.createClass({
         fetch().then(function (result) {
             this.setState({
                 loading: false,
-                exercises: result.rows.map(row => row.id)
+                exercises: result.rows.map(row => row.doc)
             });
         }.bind(this));
     }

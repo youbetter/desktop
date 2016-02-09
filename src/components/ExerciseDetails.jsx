@@ -25,7 +25,7 @@ const ExerciseDetails = React.createClass({
         } else {
             component = (
                 <div>
-                    <h2>{this.state.exercise._id}</h2>
+                    <h2>{this.state.exercise.title}</h2>
                     <ul>
                         {this.state.exercise.instructions.map((instruction, index) => {
                             return <li key={index}>{instruction}</li>;

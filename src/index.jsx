@@ -21,7 +21,7 @@ const routes = [
         action: 'exercise',
         text: 'Exercise',
         component: Exercise,
-        props: [ 'db' ]
+        props: [ 'db', 'userId' ]
     },
     {
         action: 'welcome',
@@ -32,12 +32,12 @@ const routes = [
     
 ];
 
-const youBetter = function (el, remoteDb) {
-    const db = new PouchDB('you-better');
+const youBetter = function (el, userId, remoteDb) {
+    const db = new PouchDB('user_' + userId);
 
     db.sync(remoteDb, { live: true, retry: true });
 
-    render(<App name="You Better" db={db} routes={routes}></App>, el);
+    render(<App name="You Better" db={db} userId={userId} routes={routes}></App>, el);
 }
 
 // Provide a main function on the window object.

@@ -8,6 +8,7 @@ import ExerciseDetails from './ExerciseDetails.jsx';
 const Exercise = React.createClass({
     propTypes: {
         db: React.PropTypes.instanceOf(PouchDB).isRequired,
+        userId: React.PropTypes.string.isRequired,
         initialAction: React.PropTypes.oneOf([ 'list-exercises', 'add-exercise' ]),
         initialQuery: React.PropTypes.object
     },
@@ -86,10 +87,11 @@ const Exercise = React.createClass({
                 );
         }
     },
-    // TODO Add type: 'exercise' and create views
     addExercise: function (title, instructions) {
         return this.props.db.put({
-            _id: title,
+            _id: `user:${this.props.userId}:exercise:${title}`,
+            type: 'exercise',
+            title: title,
             instructions: instructions
         });
     },
@@ -97,12 +99,17 @@ const Exercise = React.createClass({
         return this.props.db.get(id);
     },
     listExercises: function (skip, limit) {
-        return this.props.db.allDocs();
+        return this.props.db.allDocs({
+            'include_docs': true,
+            startkey: `user:${this.props.userId}:exercise:`,
+            endkey: `user:${this.props.userId}:exercise:\ufff0`
+        });
     },
     searchExercises: function (term, skip, limit) {
         return this.props.db.allDocs({
-            startkey: term,
-            endkey: term + '\uffff'
+            'include_docs': true,
+            startkey: `user:${this.props.userId}:exercise:${term}`,
+            endkey: `user:${this.props.userId}:exercise:${term}\uffff`
         });
     },
     showAddExerciseForm: function () {
