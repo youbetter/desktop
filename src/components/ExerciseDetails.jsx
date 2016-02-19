@@ -25,12 +25,24 @@ const ExerciseDetails = React.createClass({
         } else {
             component = (
                 <div>
-                    <h2>{this.state.exercise.title}</h2>
-                    <ul>
+                    <h2>{this.state.exercise.name}</h2>
+                    <ol>
                         {this.state.exercise.instructions.map((instruction, index) => {
                             return <li key={index}>{instruction}</li>;
                         })}
-                    </ul>
+                    </ol>
+                    {
+                        this.state.exercise.tips && this.state.exercise.tips.length ?
+                        <div>
+                            <h5>Tips</h5>
+                            <ul>
+                                {this.state.exercise.tips.map((tip, index) => {
+                                    return <li key={`tip_${index}`}>{tip}</li>;
+                                })}
+                            </ul>
+                        </div> :
+                        ''
+                    }
                     {
                         this.props.link ? 
                         <a href="#" onClick={this.props.link.handleClick}>{'< ' + this.props.link.text}</a> :

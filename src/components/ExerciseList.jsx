@@ -34,7 +34,7 @@ const ExerciseList = React.createClass({
                         this.props.showDetails(exercise._id);
                     }.bind(this);
 
-                    return <li key={exercise._id}><a href="#" onClick={onClick}>{exercise.title}</a></li>;
+                    return <li key={exercise._id}><a href="#" onClick={onClick}>{exercise.name}</a></li>;
                 }.bind(this));
 
                 state = <ul>{exercises}</ul>;

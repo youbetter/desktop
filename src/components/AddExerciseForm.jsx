@@ -7,61 +7,64 @@ const AddExerciseForm = React.createClass({
     },
     getInitialState: function () {
         return {
-            title: '',
+            name: '',
             instructions: [ '' ],
+            tips: [ '' ],
+            isRepetitive: false,
+            isWeightTraining: false,
             saving: false
-        }
+        };
     },
     componentDidMount: function () {
-        this.refs['title-input'].focus();
+        this.refs['name'].focus();
     },
-    onInputKeyPress: function (e) {
+    onKeyPress: function (e) {
         if (e.which === 13) {
             e.preventDefault();
 
-            if (e.target === this.refs['instruction-input'] && e.target.value) {
-                this.setState(
-                    Object.assign(
-                        { },
-                        ...this.state,
-                        { instructions: [ ...this.state.instructions, '' ] }
-                    )
-                );
+            switch (e.target.name) {
+                case 'instructions':
+                    this.setState({ instructions: [ ...this.state.instructions, '' ] });
+                    break;
+                case 'tips':
+                    this.setState({ tips: [ ...this.state.tips, '' ] });
+                    break;
             }
 
             return false;
         }
     },
-    onTitleInput: function (e) {
-        this.setState(Object.assign({ }, ...this.state, { title: e.target.value }));
+    onNameChange: function (e) {
+        this.setState({ name: e.target.value });
     },
-    onInstructionInputChange: function (e) {
-        this.setState(
-            Object.assign(
-                { },
-                ...this.state,
-                { instructions: [ ...this.state.instructions.slice(0, -1), e.target.value ] }
-            )
-        );
+    onCheckboxChange: function (e) {
+        var state = { };
+
+        state[e.target.name] = e.target.checked;
+
+        this.setState(state);
+    },
+    onInputChange: function (e) {
+        var state = { };
+
+        state[e.target.name] = [ ...this.state[e.target.name].slice(0, -1), e.target.value ];
+
+        this.setState(state);
     },
     onSubmit: function (e) {
         e.preventDefault();
 
         this.props.handleSubmit(
-            this.state.title,
-            this.state.instructions.filter(instruction => !!instruction)
+            this.state.name,
+            this.state.instructions.filter(instruction => !!instruction),
+            this.state.tips.filter(tip => !!tip),
+            this.state.isRepetitive
         ).then(function () {
             this.setState(this.getInitialState());
-            this.refs['title-input'].focus();
+            this.refs['name'].focus();
         }.bind(this));
 
-        this.setState(
-            Object.assign(
-                { },
-                ...this.state,
-                { saving: true }
-            )
-        );
+        this.setState({ saving: true });
     },
     onCancel: function (e) {
         e.preventDefault();
@@ -69,16 +72,23 @@ const AddExerciseForm = React.createClass({
         this.props.handleCancel();
     },
     render: function () {
-        let previousSteps = '';
-        var instructions;
+        var list = (function (items) {
+            var list = '';
 
-        if (this.state.instructions.length > 1) {
-            instructions = this.state.instructions.slice(0, -1).map(function (instruction, index) {
-                return <li key={index}>{instruction}</li>;
-            });
+            if (this.state[items].length > 1) {
+                list = this.state[items].slice(0, -1).map(function (item, index) {
+                    return <li key={`${items}_${index}`}>{item}</li>;
+                });
 
-            previousSteps = <ol>{instructions}</ol>
-        }
+                list = <ol className="list-unstyled">{list}</ol>;
+
+                if (items === 'tips') {
+                    list = <div><h5>Tips</h5>{list}</div>;
+                }
+            }
+
+            return list;
+        }).bind(this);
 
         return (
             <form className="form-horizontal" onSubmit={this.onSubmit}>
@@ -88,27 +98,66 @@ const AddExerciseForm = React.createClass({
                             type="text"
                             className="form-control input-lg"
                             disabled={this.state.saving ? true : false}
-                            placeholder="Title"
-                            onKeyPress={this.onInputKeyPress}
-                            onChange={this.onTitleInput}
-                            value={this.state.title}
-                            ref="title-input"
+                            placeholder="Name of Exercise"
+                            onKeyPress={this.onKeyPress}
+                            onChange={this.onNameChange}
+                            value={this.state.name}
+                            ref="name"
                         />
                     </div>
                 </div>
                 <div className="form-group">
                     <div className="col-xs-12">
+                        <div className="checkbox">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    disabled={this.state.saving ? true : false}
+                                    onChange={this.onCheckboxChange}
+                                    checked={this.state.isRepetitive}
+                                    name="isRepetitive"
+                                ></input> Performance measured in reps
+                            </label>
+                        </div>
+                        <div className="checkbox">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    disabled={this.state.saving ? true : false}
+                                    onChange={this.onCheckboxChange}
+                                    checked={this.state.isWeightTraining}
+                                    name="isWeightTraining"
+                                ></input> Performed using weights
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="col-xs-12 col-md-6">
                         <h5>Instructions</h5>
-                        {previousSteps}                        
+                        {list('instructions')}                        
                         <input
                             type="text"
                             className="form-control"
                             disabled={this.state.saving ? true : false}
                             placeholder={ 'Step ' + this.state.instructions.length }
-                            onKeyPress={this.onInputKeyPress}
-                            onChange={this.onInstructionInputChange}
+                            onKeyPress={this.onKeyPress}
+                            onChange={this.onInputChange}
                             value={this.state.instructions.slice(-1)[0]}
-                            ref="instruction-input"
+                            name="instructions"
+                        />
+                    </div>
+                    <div className="col-xs-12 col-md-6">
+                        {list('tips')}                        
+                        <input
+                            type="text"
+                            className="form-control"
+                            disabled={this.state.saving ? true : false}
+                            placeholder="Tip for doing the exercise properly"
+                            onKeyPress={this.onKeyPress}
+                            onChange={this.onInputChange}
+                            value={this.state.tips.slice(-1)[0]}
+                            name="tips"
                         />
                     </div>
                 </div>
@@ -124,7 +173,7 @@ const AddExerciseForm = React.createClass({
                         <button
                             type="submit"
                             className="btn btn-primary"
-                            disabled={this.state.saving ? true : !this.state.title ? true : false }
+                            disabled={this.state.saving ? true : !this.state.name ? true : false }
                         >
                             { this.state.saving ? 'Saving...' : 'Add Exercise' }
                         </button>

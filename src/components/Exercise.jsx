@@ -87,12 +87,15 @@ const Exercise = React.createClass({
                 );
         }
     },
-    addExercise: function (title, instructions) {
+    addExercise: function (name, instructions, isRepetitive, isWeightTraining) {
         return this.props.db.put({
-            _id: `user:${this.props.userId}:exercise:${title}`,
+            _id: `exercise:${name}:by:${this.props.userId}`,
             type: 'exercise',
-            title: title,
-            instructions: instructions
+            name: name,
+            instructions: instructions,
+            isRepetitive: isRepetitive,
+            isWeightTraining: isWeightTraining,
+            createdBy: this.props.userId
         });
     },
     viewExercise: function (id) {
@@ -100,16 +103,16 @@ const Exercise = React.createClass({
     },
     listExercises: function (skip, limit) {
         return this.props.db.allDocs({
-            'include_docs': true,
-            startkey: `user:${this.props.userId}:exercise:`,
-            endkey: `user:${this.props.userId}:exercise:\ufff0`
+            include_docs: true,
+            startkey: 'exercise:',
+            endkey: 'exercise:\ufff0'
         });
     },
     searchExercises: function (term, skip, limit) {
         return this.props.db.allDocs({
-            'include_docs': true,
-            startkey: `user:${this.props.userId}:exercise:${term}`,
-            endkey: `user:${this.props.userId}:exercise:${term}\uffff`
+            include_docs: true,
+            startkey: `exercise:${term}`,
+            endkey: `exercise:${term}\uffff`
         });
     },
     showAddExerciseForm: function () {

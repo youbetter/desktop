@@ -25,7 +25,7 @@ const SearchExercisesForm = React.createClass({
                         className="form-control"
                         onChange={this.onChange}
                         value={this.state.query}
-                        placeholder="Exercise Title"
+                        placeholder="Exercise"
                     />
                 </div>
                 <button
