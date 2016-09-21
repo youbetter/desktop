@@ -5,7 +5,7 @@ import AddExerciseForm from './AddExerciseForm.jsx';
 import ExerciseList from './ExerciseList.jsx';
 import ExerciseDetails from './ExerciseDetails.jsx';
 
-const Exercise = React.createClass({
+const Exertion = React.createClass({
     propTypes: {
         db: React.PropTypes.instanceOf(PouchDB).isRequired,
         userId: React.PropTypes.string.isRequired,
@@ -87,12 +87,13 @@ const Exercise = React.createClass({
                 );
         }
     },
-    addExercise: function (name, instructions, isRepetitive, isWeightTraining) {
+    addExercise: function (name, instructions, tips, isRepetitive, isWeightTraining) {
         return this.props.db.put({
             _id: `exercise:${name}:by:${this.props.userId}`,
             type: 'exercise',
             name: name,
             instructions: instructions,
+            tips: tips,
             isRepetitive: isRepetitive,
             isWeightTraining: isWeightTraining,
             createdBy: this.props.userId
@@ -139,4 +140,4 @@ const Exercise = React.createClass({
     }
 });
 
-export default Exercise;
+export default Exertion;

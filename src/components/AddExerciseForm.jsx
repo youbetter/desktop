@@ -58,7 +58,8 @@ const AddExerciseForm = React.createClass({
             this.state.name,
             this.state.instructions.filter(instruction => !!instruction),
             this.state.tips.filter(tip => !!tip),
-            this.state.isRepetitive
+            this.state.isRepetitive,
+            this.state.isWeightTraining
         ).then(function () {
             this.setState(this.getInitialState());
             this.refs['name'].focus();

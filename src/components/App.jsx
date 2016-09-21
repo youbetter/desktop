@@ -44,7 +44,7 @@ const App = React.createClass({
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span> </button>
                             <a href="#" onClick={this.generateClickHandler('index')} className="navbar-brand">
-                                <i style={{ textTransform: 'uppercase' }}>You Better</i>
+                                <i>you, better</i>
                             </a>
                         </div>
                         <div className="collapse navbar-collapse" id="navbar-links">

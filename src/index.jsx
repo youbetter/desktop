@@ -5,31 +5,42 @@ import './styles/bootstrap.css';
 import PouchDB from 'pouchdb';
 
 import WelcomeMessage from './components/WelcomeMessage.jsx';
-import Journal from './components/Journal.jsx';
-import Exercise from './components/Exercise.jsx';
+import Activity from './components/Activity.jsx';
+import Reflection from './components/Reflection.jsx';
+import Exertion from './components/Exertion.jsx';
+import Consumption from './components/Consumption.jsx';
 
 // To use the PouchDB-Fauxton Chrome Extension, window.PouchDB needs to be set
 if (__DEV__) window.PouchDB = PouchDB;
 
 const routes = [
     {
-        action: 'journal',
-        text: 'Journal',
-        component: Journal
-    },
-    {
-        action: 'exercise',
-        text: 'Exercise',
-        component: Exercise,
-        props: [ 'db', 'userId' ]
-    },
-    {
         action: 'welcome',
         text: 'welcome',
         component: WelcomeMessage,
         index: true
+    },
+    {
+        action: 'activity',
+        text: 'Activity',
+        component: Activity
+    },
+    {
+        action: 'consumption',
+        text: 'Consumption',
+        component: Consumption
+    },
+    {
+        action: 'exertion',
+        text: 'Exertion',
+        component: Exertion,
+        props: [ 'db', 'userId' ]
+    },
+    {
+        action: 'reflection',
+        text: 'Reflection',
+        component: Reflection
     }
-    
 ];
 
 const youBetter = function (el, userId, remoteDb) {
